@@ -12,6 +12,24 @@ services:
       test: ["CMD", "echo", "ruok", "|", "nc", "localhost", "2181"]
       interval: 10s
       retries: 5
+    producer:
+    build: ./producer
+    container_name: producer
+    depends_on:
+      kafka:
+        condition: service_healthy
+    environment:
+      - KAFKA_BROKER=kafka:9092
+    restart: always
+    pricing-engine-consumer:
+    build: ./pricing-engine
+    container_name: pricing-engine
+    depends_on:
+      kafka:
+        condition: service_healthy
+      database:
+        condition: service_healthy
+    restart: always
 
   kafka:
     image: bitnami/kafka:latest
