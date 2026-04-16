@@ -30,6 +30,15 @@ services:
       database:
         condition: service_healthy
     restart: always
+    analytics-recorder-consumer:
+    build: ./analytics-recorder
+    container_name: analytics-recorder
+    depends_on:
+      kafka:
+        condition: service_healthy
+      database:
+        condition: service_healthy
+    restart: always
 
   kafka:
     image: bitnami/kafka:latest
